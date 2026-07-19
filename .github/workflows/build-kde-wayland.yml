@@ -105,7 +105,7 @@ jobs:
               echo "pkg_pattern=*.deb" >> "$GITHUB_OUTPUT"
               ;;
             Neon)
-              echo "image=kdeneon/neon:noble-user" >> "$GITHUB_OUTPUT"
+              echo "image=invent-registry.kde.org/neon/docker-images/plasma:user" >> "$GITHUB_OUTPUT"
               echo "script=producers/kde/Neon/build.sh" >> "$GITHUB_OUTPUT"
               echo "dest=anland-build/Neon" >> "$GITHUB_OUTPUT"
               echo "pkg_pattern=*.deb" >> "$GITHUB_OUTPUT"
