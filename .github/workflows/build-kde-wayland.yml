@@ -172,11 +172,15 @@ jobs:
                   ;;
               esac
 
-              if ! git clone --depth=1 --branch "$ANLAND_REF" "$ANLAND_REPO" /tmp/anland; then
-                git clone --depth=1 "$ANLAND_REPO" /tmp/anland
+              echo "Cloning anland repository:"
+              echo "REPO: $ANLAND_REPO"
+              echo "REF: $ANLAND_REF"
+              GIT_CURL_VERBOSE=1 GIT_TRACE=1 git clone --depth=1 --branch "$ANLAND_REF" "$ANLAND_REPO" /tmp/anland || {
+                echo "Shallow branch clone failed, falling back..."
+                GIT_CURL_VERBOSE=1 GIT_TRACE=1 git clone --depth=1 "$ANLAND_REPO" /tmp/anland
                 git -C /tmp/anland fetch --depth=1 origin "$ANLAND_REF"
                 git -C /tmp/anland checkout --detach FETCH_HEAD
-              fi
+              }
 
               # Debian 13 (Trixie) 使用 DEB822 格式的 .sources 文件，
               # build.sh 自带的 deb-src 启用逻辑不兼容此格式，需手动修复
