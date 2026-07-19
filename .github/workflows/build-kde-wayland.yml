@@ -14,6 +14,7 @@ on:
           - 'Debian13'
           - 'Fedora43'
           - 'Fedora44'
+          - 'Neon'
           - 'all'
       anland_ref:
         description: 'anland 仓库分支、标签或 commit'
@@ -57,9 +58,9 @@ jobs:
 
           case "${{ github.event.inputs.build_target }}" in
             all)
-              targets='["ubuntu2604","Debian13","Fedora43","Fedora44"]'
+              targets='["ubuntu2604","Debian13","Fedora43","Fedora44","Neon"]'
               ;;
-            ubuntu2604|Debian13|Fedora43|Fedora44)
+            ubuntu2604|Debian13|Fedora43|Fedora44|Neon)
               targets='["${{ github.event.inputs.build_target }}"]'
               ;;
             *)
@@ -101,6 +102,12 @@ jobs:
               echo "image=ubuntu:26.04" >> "$GITHUB_OUTPUT"
               echo "script=producers/kde/ubuntu2604_v5/build.sh" >> "$GITHUB_OUTPUT"
               echo "dest=anland-build/ubuntu2604" >> "$GITHUB_OUTPUT"
+              echo "pkg_pattern=*.deb" >> "$GITHUB_OUTPUT"
+              ;;
+            Neon)
+              echo "image=kdeneon/neon:noble-user" >> "$GITHUB_OUTPUT"
+              echo "script=producers/kde/Neon/build.sh" >> "$GITHUB_OUTPUT"
+              echo "dest=anland-build/Neon" >> "$GITHUB_OUTPUT"
               echo "pkg_pattern=*.deb" >> "$GITHUB_OUTPUT"
               ;;
             Debian13)
@@ -152,7 +159,7 @@ jobs:
 
               # 按发行版安装基础工具
               case "$BUILD_TARGET" in
-                Debian13|ubuntu2604)
+                Debian13|ubuntu2604|Neon)
                   apt-get update
                   apt-get install -y --no-install-recommends \
                     git ca-certificates sudo \

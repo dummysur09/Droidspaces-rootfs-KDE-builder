@@ -66,9 +66,10 @@ detect_target() {
         ubuntu:26.04*) TARGET="ubuntu2604"; PACKAGE_TYPE="deb" ;;
         fedora:43*) TARGET="Fedora43"; PACKAGE_TYPE="rpm" ;;
         fedora:44*) TARGET="Fedora44"; PACKAGE_TYPE="rpm" ;;
+        neon:*) TARGET="Neon"; PACKAGE_TYPE="deb" ;;
         *)
-            die "不支持当前系统 ${PRETTY_NAME:-${ID} ${VERSION_ID}}。仅支持 Debian 13、Ubuntu 26.04、Fedora 43/44。" \
-                "Unsupported system: ${PRETTY_NAME:-${ID} ${VERSION_ID}}. Supported systems are Debian 13, Ubuntu 26.04, and Fedora 43/44."
+            die "不支持当前系统 ${PRETTY_NAME:-${ID} ${VERSION_ID}}。仅支持 Debian 13、Ubuntu 26.04、Fedora 43/44、KDE Neon。" \
+                "Unsupported system: ${PRETTY_NAME:-${ID} ${VERSION_ID}}. Supported systems are Debian 13, Ubuntu 26.04, Fedora 43/44, and KDE Neon."
             ;;
     esac
 
