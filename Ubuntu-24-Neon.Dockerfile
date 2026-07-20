@@ -67,7 +67,7 @@ RUN set -x && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     # 核心工具组件
-    bash jq dialog coreutils file findutils grep sed gawk curl wget ca-certificates locales bash-completion udev dbus systemd-sysv systemd-resolved fastfetch \
+    bash jq dialog coreutils file findutils grep sed gawk curl wget ca-certificates locales bash-completion udev dbus systemd-sysv systemd-resolved \
     # 用户请求的基础开发/编辑工具
     git nano sudo \
     # 网络与 SSH 工具
@@ -77,7 +77,7 @@ RUN set -x && \
     # 核心内核模块支持
     kmod tzdata && \
     ############################################## KDE支持 ################################################
-    sed -i 's|^path-exclude=/usr/share/locale/\*/LC_MESSAGES/\*.mo|#&|' /etc/dpkg/dpkg.cfg.d/excludes || true && \
+    (sed -i 's|^path-exclude=/usr/share/locale/\*/LC_MESSAGES/\*.mo|#&|' /etc/dpkg/dpkg.cfg.d/excludes || true) && \
     ANLAND_DEBS="" && \
     if [ "$ENABLE_anland_kde_ARG" = "true" ] && [ "$BUILD_KDE" != "none" ]; then \
         ANLAND_DEBS="/tmp/anland-build/Neon/*.deb"; \
