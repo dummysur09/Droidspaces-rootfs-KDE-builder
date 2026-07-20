@@ -81,9 +81,16 @@ RUN apt-get update && \
     if [ "$ENABLE_anland_kde_ARG" = "true" ] && [ "$BUILD_KDE" != "none" ]; then \
         ANLAND_DEBS="/tmp/anland-build/Neon/*.deb"; \
     fi && \
+    BREEZE_VER=$(apt-cache madison breeze | grep noble | head -1 | awk '{print $3}' || true) && \
+    CLI_VER=$(apt-cache madison kde-cli-tools | grep noble | head -1 | awk '{print $3}' || true) && \
+    POWERDEVIL_VER=$(apt-cache madison powerdevil | grep noble | head -1 | awk '{print $3}' || true) && \
+    BREEZE_PKG="" && [ -n "$BREEZE_VER" ] && BREEZE_PKG="breeze-cursor-theme=$BREEZE_VER" || true && \
+    CLI_PKG="" && [ -n "$CLI_VER" ] && CLI_PKG="kde-cli-tools-data=$CLI_VER" || true && \
+    POWERDEVIL_PKG="" && [ -n "$POWERDEVIL_VER" ] && POWERDEVIL_PKG="powerdevil-data=$POWERDEVIL_VER" || true && \
     if [ "$BUILD_KDE" = "min" ]; then \
         apt-get install -y --no-install-recommends \
         $ANLAND_DEBS \
+        $BREEZE_PKG $CLI_PKG $POWERDEVIL_PKG \
         dbus-x11 x11-xserver-utils fonts-noto-cjk fonts-noto-color-emoji kde-plasma-desktop kubuntu-settings-desktop kubuntu-wallpapers \
         pipewire pipewire-pulse wireplumber powerdevil kscreen plasma-pa ark kwin-x11 upower konsole \
         dolphin kate kinfocenter mesa-utils pulseaudio-utils vulkan-tools dbus-user-session \
@@ -93,6 +100,7 @@ RUN apt-get update && \
     if [ "$BUILD_KDE" = "conc" ]; then \
         apt-get install -y --no-install-recommends \
         $ANLAND_DEBS \
+        $BREEZE_PKG $CLI_PKG $POWERDEVIL_PKG \
         dbus-x11 x11-xserver-utils fonts-noto-cjk fonts-noto-color-emoji kde-plasma-desktop kubuntu-settings-desktop kubuntu-wallpapers \
         pipewire pipewire-pulse wireplumber powerdevil kscreen plasma-pa ark kwin-x11 upower konsole \
         dolphin kate kinfocenter mesa-utils pulseaudio-utils vulkan-tools dbus-user-session aha clinfo dmidecode libdisplay-info-bin wayland-utils xserver-xorg \
