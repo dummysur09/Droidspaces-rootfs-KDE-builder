@@ -76,9 +76,11 @@ RUN apt-get update && \
     # 核心内核模块支持
     kmod tzdata && \
     ############################################## KDE支持 ################################################
-    # 最小化KDE
-    # 解除底层系统对中文等翻译文件(.mo)的剔除规则，防止安装桌面时丢包
     sed -i 's|^path-exclude=/usr/share/locale/\*/LC_MESSAGES/\*.mo|#&|' /etc/dpkg/dpkg.cfg.d/excludes || true && \
+    if [ "$ENABLE_anland_kde_ARG" = "true" ] && [ "$BUILD_KDE" != "none" ]; then \
+        echo "--> [预安装] 正在预释放预编译 of kwin/xwayland deb 包以避免 apt 依赖冲突..." && \
+        dpkg -i /tmp/anland-build/Neon/*.deb || true; \
+    fi && \
     if [ "$BUILD_KDE" = "min" ]; then \
         apt-get install -y --no-install-recommends \
         dbus-x11 x11-xserver-utils fonts-noto-cjk fonts-noto-color-emoji kde-plasma-desktop kubuntu-settings-desktop kubuntu-wallpapers \
