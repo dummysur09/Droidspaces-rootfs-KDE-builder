@@ -81,9 +81,9 @@ RUN apt-get update && \
     if [ "$ENABLE_anland_kde_ARG" = "true" ] && [ "$BUILD_KDE" != "none" ]; then \
         ANLAND_DEBS="/tmp/anland-build/Neon/*.deb"; \
     fi && \
-    BREEZE_VER=$(apt-cache madison breeze | grep noble | head -1 | awk '{print $3}' || true) && \
-    CLI_VER=$(apt-cache madison kde-cli-tools | grep noble | head -1 | awk '{print $3}' || true) && \
-    POWERDEVIL_VER=$(apt-cache madison powerdevil | grep noble | head -1 | awk '{print $3}' || true) && \
+    BREEZE_VER=$(apt-cache madison breeze | grep noble | head -1) && BREEZE_VER=${BREEZE_VER#*| } && BREEZE_VER=${BREEZE_VER%% *} && \
+    CLI_VER=$(apt-cache madison kde-cli-tools | grep noble | head -1) && CLI_VER=${CLI_VER#*| } && CLI_VER=${CLI_VER%% *} && \
+    POWERDEVIL_VER=$(apt-cache madison powerdevil | grep noble | head -1) && POWERDEVIL_VER=${POWERDEVIL_VER#*| } && POWERDEVIL_VER=${POWERDEVIL_VER%% *} && \
     BREEZE_PKG="" && [ -n "$BREEZE_VER" ] && BREEZE_PKG="breeze-cursor-theme=$BREEZE_VER" || true && \
     CLI_PKG="" && [ -n "$CLI_VER" ] && CLI_PKG="kde-cli-tools-data=$CLI_VER" || true && \
     POWERDEVIL_PKG="" && [ -n "$POWERDEVIL_VER" ] && POWERDEVIL_PKG="powerdevil-data=$POWERDEVIL_VER" || true && \
