@@ -63,7 +63,8 @@ RUN sed -i 's/Components: main/Components: main restricted universe multiverse/g
     apt-get update && \
     apt-get upgrade -y
 
-RUN apt-get update && \
+RUN set -x && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
     # 核心工具组件
     bash jq dialog coreutils file findutils grep sed gawk curl wget ca-certificates locales bash-completion udev dbus systemd-sysv systemd-resolved fastfetch \
