@@ -77,12 +77,13 @@ RUN apt-get update && \
     kmod tzdata && \
     ############################################## KDE支持 ################################################
     sed -i 's|^path-exclude=/usr/share/locale/\*/LC_MESSAGES/\*.mo|#&|' /etc/dpkg/dpkg.cfg.d/excludes || true && \
+    ANLAND_DEBS="" && \
     if [ "$ENABLE_anland_kde_ARG" = "true" ] && [ "$BUILD_KDE" != "none" ]; then \
-        echo "--> [预安装] 正在预释放预编译 of kwin/xwayland deb 包以避免 apt 依赖冲突..." && \
-        dpkg -i /tmp/anland-build/Neon/*.deb || true; \
+        ANLAND_DEBS="/tmp/anland-build/Neon/*.deb"; \
     fi && \
     if [ "$BUILD_KDE" = "min" ]; then \
         apt-get install -y --no-install-recommends \
+        $ANLAND_DEBS \
         dbus-x11 x11-xserver-utils fonts-noto-cjk fonts-noto-color-emoji kde-plasma-desktop kubuntu-settings-desktop kubuntu-wallpapers \
         pipewire pipewire-pulse wireplumber powerdevil kscreen plasma-pa ark kwin-x11 upower konsole \
         dolphin kate kinfocenter mesa-utils pulseaudio-utils vulkan-tools dbus-user-session \
@@ -91,6 +92,7 @@ RUN apt-get update && \
     # 精简KDE
     if [ "$BUILD_KDE" = "conc" ]; then \
         apt-get install -y --no-install-recommends \
+        $ANLAND_DEBS \
         dbus-x11 x11-xserver-utils fonts-noto-cjk fonts-noto-color-emoji kde-plasma-desktop kubuntu-settings-desktop kubuntu-wallpapers \
         pipewire pipewire-pulse wireplumber powerdevil kscreen plasma-pa ark kwin-x11 upower konsole \
         dolphin kate kinfocenter mesa-utils pulseaudio-utils vulkan-tools dbus-user-session aha clinfo dmidecode libdisplay-info-bin wayland-utils xserver-xorg \
@@ -101,6 +103,7 @@ RUN apt-get update && \
     # mobile版KDE
     if [ "$BUILD_KDE" = "mobile" ]; then \
         apt-get install -y --no-install-recommends \
+        $ANLAND_DEBS \
         dbus-x11 x11-xserver-utils fonts-noto-cjk fonts-noto-color-emoji wayland-utils xserver-xorg dbus-user-session \
         plasma-nano plasma-mobile plasma-mobile-phone maliit-keyboard maliit-framework maliit-server-qt6 \
         kwin-wayland pipewire pipewire-pulse wireplumber powerdevil plasma-pa upower pulseaudio-utils \
@@ -115,9 +118,7 @@ RUN apt-get update && \
     fi && \
     ############################################## anland_kde(wayland) 支持 ################################################
     if [ "$ENABLE_anland_kde_ARG" = "true" ] && [ "$BUILD_KDE" != "none" ]; then \
-        echo "--> [开启] 正在安装 anland_kde..." && \
-        echo "--> [开启] 正在安装预编译的 kwin deb 包..." && \
-        dpkg -i /tmp/anland-build/Neon/*.deb || apt-get install -f -y && \
+        echo "--> [开启] 正在将 anland_kde/KWin 预编译包设为 hold 模式..." && \
         echo "--> [开启] 设置预编译 deb 包为 hold 模式，防止被 apt 更新覆盖..." && \
         for f in /tmp/anland-build/Neon/*.deb; do \
             pkgname=$(dpkg-deb -f "$f" Package) && \
